@@ -9,6 +9,7 @@ services:
         volumes:
             # - ../:/var/www
             - ../bs-english/:/var/www/bs-english
+            - ../bs-furniture/:/var/www/bs-furniture
 
 ### Workspace Utilities Container ###########################
 
