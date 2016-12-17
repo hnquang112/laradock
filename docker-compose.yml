@@ -7,8 +7,9 @@ services:
     applications:
         image: tianon/true
         volumes:
-            - ../:/var/www
-#            - ../sample/:/var/www/sample
+            # - ../:/var/www
+            - ../bs-english/:/var/www/bs-english
+            - ../bs-furniture/:/var/www/bs-furniture
 
 ### Workspace Utilities Container ###########################
 
@@ -18,18 +19,18 @@ services:
             args:
                 - INSTALL_XDEBUG=false
                 - INSTALL_MONGO=false
-                - INSTALL_NODE=false
-                - INSTALL_YARN=false
+                - INSTALL_NODE=true
+                - INSTALL_YARN=true
                 - INSTALL_DRUSH=false
                 - INSTALL_AEROSPIKE_EXTENSION=false
                 - INSTALL_V8JS_EXTENSION=false
-                - COMPOSER_GLOBAL_INSTALL=false
+                - COMPOSER_GLOBAL_INSTALL=true
                 - INSTALL_WORKSPACE_SSH=false
                 - PUID=1000
                 - PGID=1000
                 - NODE_VERSION=stable
                 - YARN_VERSION=latest
-                - TZ=UTC
+                - TZ=Asia/Ho_Chi_Minh
         volumes_from:
             - applications
         extra_hosts:
@@ -116,7 +117,7 @@ services:
 ### MySQL Container #########################################
 
     mysql:
-        build: 
+        build:
             context: ./mysql
             args:
                 - MYSQL_DATABASE=homestead
