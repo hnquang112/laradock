@@ -10,7 +10,7 @@
 #    https://hub.docker.com/r/laradock/workspace/tags/
 #
 
-FROM laradock/workspace:1.2
+FROM laradock/workspace:1.3
 
 MAINTAINER Mahmoud Zalt <mahmoud@zalt.me>
 
@@ -267,7 +267,15 @@ USER laradock
 
 RUN echo "" >> ~/.bashrc && \
     echo 'export PATH="/var/www/vendor/bin:$PATH"' >> ~/.bashrc
+	
+#####################################
+# Laravel Artisan Alias
+#####################################
+USER root
 
+RUN echo "" >> ~/.bashrc && \
+    echo 'alias art="php artisan"' >> ~/.bashrc
+	
 #
 #--------------------------------------------------------------------------
 # Final Touch
