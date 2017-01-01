@@ -46,7 +46,7 @@ ARG PUID=1000
 ARG PGID=1000
 RUN groupadd -g $PGID laradock && \
     useradd -u $PUID -g laradock -m laradock
-    
+
 #####################################
 # Set Timezone
 #####################################
@@ -267,7 +267,7 @@ USER laradock
 
 RUN echo "" >> ~/.bashrc && \
     echo 'export PATH="/var/www/vendor/bin:$PATH"' >> ~/.bashrc
-	
+
 #####################################
 # Laravel Artisan Alias
 #####################################
@@ -275,7 +275,22 @@ USER root
 
 RUN echo "" >> ~/.bashrc && \
     echo 'alias art="php artisan"' >> ~/.bashrc
-	
+
+#####################################
+# Laravel Envoy:
+#####################################
+USER laradock
+
+ARG INSTALL_LARAVEL_ENVOY=true
+ENV INSTALL_LARAVEL_ENVOY ${INSTALL_LARAVEL_ENVOY}
+
+RUN if [ ${INSTALL_LARAVEL_ENVOY} = true ]; then \
+    # Install the Laravel Envoy
+    echo "" >> ~/.bashrc && \
+    echo 'export PATH="~/.composer/vendor/bin:$PATH"' >> ~/.bashrc \
+    && composer global require "laravel/envoy=~1.0" \
+;fi
+
 #
 #--------------------------------------------------------------------------
 # Final Touch
