@@ -27,6 +27,7 @@ services:
                 - COMPOSER_GLOBAL_INSTALL=true
                 - INSTALL_WORKSPACE_SSH=false
                 - INSTALL_LARAVEL_ENVOY=false
+                - INSTALL_LINUXBREW=false
                 - PUID=1000
                 - PGID=1000
                 - NODE_VERSION=stable
@@ -137,7 +138,7 @@ services:
     mariadb:
         build: ./mariadb
         volumes:
-            - mysql:/var/lib/mysql
+            - mariadb:/var/lib/mysql
         ports:
             - "3306:3306"
         environment:
@@ -192,7 +193,7 @@ services:
             - "27017:27017"
         volumes:
             - mongo:/data/db
-            
+
 ### RethinkDB Container #######################################
 
     rethinkdb:
