@@ -74,6 +74,10 @@ RUN if [ ${COMPOSER_GLOBAL_INSTALL} = true ]; then \
     composer global install \
 ;fi
 
+# Export composer vendor path
+RUN echo "" >> ~/.bashrc && \
+echo 'export PATH="~/.composer/vendor/bin:$PATH"' >> ~/.bashrc
+
 #####################################
 # Crontab
 #####################################
@@ -85,13 +89,19 @@ RUN chmod -R 644 /etc/cron.d
 #####################################
 # User Aliases
 #####################################
-USER root
 
+USER laradock
 COPY ./aliases.sh /home/laradock/aliases.sh
-RUN echo "" >> ~/.bashrc
-RUN echo "# Load Custom Aliases" >> ~/.bashrc
-RUN echo "source /home/laradock/aliases.sh" >> ~/.bashrc
-RUN echo "" >> ~/.bashrc
+RUN echo "" >> ~/.bashrc && \
+    echo "# Load Custom Aliases" >> ~/.bashrc && \
+    echo "source /home/laradock/aliases.sh" >> ~/.bashrc && \
+    echo "" >> ~/.bashrc
+    
+USER root
+RUN echo "" >> ~/.bashrc && \
+    echo "# Load Custom Aliases" >> ~/.bashrc && \
+    echo "source /home/laradock/aliases.sh" >> ~/.bashrc && \
+    echo "" >> ~/.bashrc
 
 #####################################
 # xDebug:
@@ -298,9 +308,20 @@ ENV INSTALL_LARAVEL_ENVOY ${INSTALL_LARAVEL_ENVOY}
 
 RUN if [ ${INSTALL_LARAVEL_ENVOY} = true ]; then \
     # Install the Laravel Envoy
-    echo "" >> ~/.bashrc && \
-    echo 'export PATH="~/.composer/vendor/bin:$PATH"' >> ~/.bashrc \
-    && composer global require "laravel/envoy=~1.0" \
+    composer global require "laravel/envoy=~1.0" \
+;fi
+
+#####################################
+# Deployer:
+#####################################
+USER laradock
+
+ARG INSTALL_DEPLOYER=false
+ENV INSTALL_DEPLOYER ${INSTALL_DEPLOYER}
+
+RUN if [ ${INSTALL_DEPLOYER} = true ]; then \
+    # Install the Deployer
+    composer global require "deployer/deployer" \
 ;fi
 
 #####################################
