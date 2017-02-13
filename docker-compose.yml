@@ -18,6 +18,7 @@ services:
             context: ./workspace
             args:
                 - INSTALL_XDEBUG=false
+                - INSTALL_SOAP=false
                 - INSTALL_MONGO=false
                 - INSTALL_NODE=true
                 - INSTALL_YARN=true
