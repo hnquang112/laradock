@@ -289,6 +289,7 @@ services:
         volumes:
             - ./caddy/Caddyfile:/etc/Caddyfile
             - ./logs/caddy:/var/log/caddy
+            - caddy:/root/.caddy
         links:
             - php-fpm
 
