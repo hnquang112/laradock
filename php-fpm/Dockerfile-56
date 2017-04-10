@@ -83,8 +83,7 @@ RUN if [ ${INSTALL_MONGO} = true ]; then \
 ARG INSTALL_ZIP_ARCHIVE=false
 RUN if [ ${INSTALL_ZIP_ARCHIVE} = true ]; then \
     # Install the zip extension
-    pecl install zip && \
-    docker-php-ext-enable zip \
+    docker-php-ext-install zip \
 ;fi
 
 #####################################
@@ -106,6 +105,20 @@ RUN if [ ${INSTALL_MEMCACHED} = true ]; then \
     # Install the php memcached extension
     pecl install memcached-2.2.0 && \
     docker-php-ext-enable memcached \
+;fi
+
+#####################################
+# PHP MySQL:
+#####################################
+
+ARG INSTALL_MYSQL=false
+COPY ./mysql.ini /usr/local/etc/php/conf.d/mysql.ini
+RUN if [ ${INSTALL_MYSQL} = true ]; then \
+    # Install the php mysql extension
+    docker-php-ext-install mysql && \
+    docker-php-ext-install mysqli && \
+    docker-php-ext-enable mysql && \
+    docker-php-ext-enable mysqli \
 ;fi
 
 #####################################
