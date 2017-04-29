@@ -5,6 +5,7 @@ title = "Laradock"
 theme = "hugo-material-docs"
 metadataformat = "yaml"
 canonifyurls = true
+uglyurls = true
 # Enable Google Analytics by entering your tracking id
 googleAnalytics = "UA-37514928-9"
 
@@ -62,7 +63,7 @@ googleAnalytics = "UA-37514928-9"
 	weight = 3
 
 [[menu.main]]
-	name   = "Giudes"
+	name   = "Guides"
 	url    = "guides/"
 	weight = 4
 

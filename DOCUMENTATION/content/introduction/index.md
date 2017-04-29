@@ -83,7 +83,7 @@ In adhering to the separation of concerns principle as promoted by Docker, Larad
 You can turn On/Off as many instances of as any container without worrying about the configurations, everything works like a charm.
 
 - **Database Engines:**
-MySQL - MariaDB - MongoDB - Neo4j - RethinkDB - MSSQL - PostgreSQL - Postgres Postgis.
+MySQL - MariaDB - Percona - MongoDB - Neo4j - RethinkDB - MSSQL - PostgreSQL - Postgres Postgis.
 - **Cache Engines:**
 Redis - Memcached - Aerospike
 - **PHP Servers:**
@@ -93,7 +93,7 @@ PHP FPM - HHVM
 - **Message Queuing:**
 Beanstalkd - Beanstalkd Console - RabbitMQ - RabbitMQ Console - PHP Worker
 - **Tools:**
-HAProxy - Jenkins - ElasticSearch - Selenium - Certbot - Mailhog - Minio - Varnish - PhpMyAdmin - Adminer - PgAdmin - MailHog...
+HAProxy - Jenkins - ElasticSearch - Selenium - Certbot - Mailhog - Minio - Varnish - PhpMyAdmin - Adminer - PgAdmin - MailHog - [Blackfire](https://blackfire.io)...
 
 Laradock introduces the **Workspace** Image, as a development environment.
 It contains a rich set of helpful tools, all pre-configured to work and integrate with almost any combination of Containers and tools you may choose.
@@ -118,8 +118,10 @@ If you can't find your Software in the list, build it yourself and sumit it. Con
 <a name="what-is-docker"></a>
 ## What is Docker?
 
-[Docker](https://www.docker.com) is an open-source project that automates the deployment of applications inside software containers, by providing an additional layer of abstraction and automation of [operating-system-level virtualization](https://en.wikipedia.org/wiki/Operating-system-level_virtualization) on Linux, Mac OS and Windows.
-
+[Docker](https://www.docker.com) is an open platform for developing, shipping, and running applications.
+Docker enables you to separate your applications from your infrastructure so you can deliver software quickly.
+With Docker, you can manage your infrastructure in the same ways you manage your applications.
+By taking advantage of Docker’s methodologies for shipping, testing, and deploying code quickly, you can significantly reduce the delay between writing code and running it in production.
 
 
 

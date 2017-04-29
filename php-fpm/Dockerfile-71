@@ -4,13 +4,15 @@
 #--------------------------------------------------------------------------
 #
 # To edit the 'php-fpm' base Image, visit its repository on Github
-#    https://github.com/LaraDock/php-fpm
+#    https://github.com/Laradock/php-fpm
 #
 # To change its version, see the available Tags on the Docker Hub:
 #    https://hub.docker.com/r/laradock/php-fpm/tags/
 #
+# Note: Base Image name format {image-tag}-{php-version}
+#
 
-FROM laradock/php-fpm:7.1--1.4
+FROM laradock/php-fpm:1.4-71
 
 MAINTAINER Mahmoud Zalt <mahmoud@zalt.me>
 
@@ -22,7 +24,7 @@ MAINTAINER Mahmoud Zalt <mahmoud@zalt.me>
 # Mandatory Software's such as ("mcrypt", "pdo_mysql", "libssl-dev", ....)
 # are installed on the base image 'laradock/php-fpm' image. If you want
 # to add more Software's or remove existing one, you need to edit the
-# base image (https://github.com/LaraDock/php-fpm).
+# base image (https://github.com/Laradock/php-fpm).
 #
 
 #
@@ -61,6 +63,19 @@ RUN if [ ${INSTALL_XDEBUG} = true ]; then \
 
 # Copy xdebug configration for remote debugging
 COPY ./xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
+
+#####################################
+# Blackfire:
+#####################################
+
+ARG INSTALL_BLACKFIRE=false
+RUN if [ ${INSTALL_XDEBUG} = false -a ${INSTALL_BLACKFIRE} = true ]; then \
+    version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
+    && curl -A "Docker" -o /tmp/blackfire-probe.tar.gz -D - -L -s https://blackfire.io/api/v1/releases/probe/php/linux/amd64/$version \
+    && tar zxpf /tmp/blackfire-probe.tar.gz -C /tmp \
+    && mv /tmp/blackfire-*.so $(php -r "echo ini_get('extension_dir');")/blackfire.so \
+    && printf "extension=blackfire.so\nblackfire.agent_socket=tcp://blackfire:8707\n" > $PHP_INI_DIR/conf.d/blackfire.ini \
+;fi
 
 #####################################
 # PHP REDIS EXTENSION FOR PHP 7
@@ -197,6 +212,7 @@ RUN if [ ${INSTALL_TOKENIZER} = true ]; then \
 ARG INSTALL_INTL=false
 RUN if [ ${INSTALL_INTL} = true ]; then \
     # Install intl and requirements
+    apt-get -y update && \
     apt-get install -y zlib1g-dev libicu-dev g++ && \
     docker-php-ext-configure intl && \
     docker-php-ext-install intl \

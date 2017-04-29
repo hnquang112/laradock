@@ -336,11 +336,11 @@ By installing xDebug, you are enabling it to run on startup by default.
 
 To control the behavior of xDebug (in the `php-fpm` Container), you can run the following commands from the Laradock root folder, (at the same prompt where you run docker-compose):
 
-- Stop xDebug from running by default: `./xdebugPhpFpm stop`.
-- Start xDebug by default: `./xdebugPhpFpm start`.
-- See the status: `./xdebugPhpFpm status`.
+- Stop xDebug from running by default: `.php-fpm/xdebug stop`.
+- Start xDebug by default: `.php-fpm/xdebug start`.
+- See the status: `.php-fpm/xdebug status`.
 
-Note: If `./xdebugPhpFpm` doesn't execute and gives `Permission Denied` error the problem can be that file `xdebugPhpFpm` doesn't have execution access. This can be fixed by running `chmod` command  with desired access permissions.
+Note: If `.php-fpm/xdebug` doesn't execute and gives `Permission Denied` error the problem can be that file `xdebug` doesn't have execution access. This can be fixed by running `chmod` command  with desired access permissions.
 
 
 
@@ -699,6 +699,8 @@ docker-compose up -d mysql phpmyadmin
 docker-compose up -d mariadb phpmyadmin
 ```
 
+*Note: To use with MariaDB, open `.env` and set `PMA_DB_ENGINE=mysql` to `PMA_DB_ENGINE=mariadb`.*
+
 2 - Open your browser and visit the localhost on port **8080**:  `http://localhost:8080`
 
 
@@ -718,6 +720,7 @@ docker-compose up -d adminer
 
 2 - Open your browser and visit the localhost on port **8080**:  `http://localhost:8080`
 
+**Note:** We've locked Adminer to version 4.3.0 as at the time of writing [it contained a major bug](https://sourceforge.net/p/adminer/bugs-and-features/548/) preventing PostgreSQL users from logging in. If that bug is fixed (or if you're not using PostgreSQL) feel free to set Adminer to the latest version within [the Dockerfile](https://github.com/laradock/laradock/blob/master/adminer/Dockerfile#L1): `FROM adminer:latest`
 
 
 
