@@ -3,8 +3,8 @@ server {
     listen 80;
     listen [::]:80;
 
-    server_name thegioianhngu.tk www.thegioianhngu.tk engl.dev;
-    root /var/www/bs-english/public;
+    server_name project-2.dev;
+    root /var/www/project-2/public;
     index index.php index.html index.htm;
 
     location / {

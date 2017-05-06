@@ -283,7 +283,7 @@ COPY ./aerospike.ini /etc/php/5.6/cli/conf.d/aerospike.ini
 
 RUN if [ ${INSTALL_AEROSPIKE_EXTENSION} = true ]; then \
     # Install the php aerospike extension
-    curl -L -o /tmp/aerospike-client-php.tar.gz "https://github.com/luciano-jr/aerospike-client-php/archive/master.tar.gz" \
+    curl -L -o /tmp/aerospike-client-php.tar.gz "https://github.com/aerospike/aerospike-client-php/archive/3.4.14.tar.gz" \
     && mkdir -p aerospike-client-php \
     && tar -C aerospike-client-php -zxvf /tmp/aerospike-client-php.tar.gz --strip 1 \
     && ( \
@@ -297,23 +297,6 @@ RUN if [ ${INSTALL_AEROSPIKE_EXTENSION} = true ]; then \
 
 RUN if [ ${INSTALL_AEROSPIKE_EXTENSION} = false ]; then \
     rm /etc/php/5.6/cli/conf.d/aerospike.ini \
-;fi
-
-#####################################
-# PHP V8JS:
-#####################################
-USER root
-
-ARG INSTALL_V8JS_EXTENSION=false
-ENV INSTALL_V8JS_EXTENSION ${INSTALL_V8JS_EXTENSION}
-
-RUN if [ ${INSTALL_V8JS_EXTENSION} = true ]; then \
-    # Install the php V8JS extension
-    add-apt-repository -y ppa:pinepain/libv8-5.4 \
-    && apt-get update \
-    && apt-get install -y php-dev php-pear libv8-5.4 \
-    && pecl install v8js \
-    && echo "extension=v8js.so" >> /etc/php/5.6/cli/php.ini \
 ;fi
 
 #####################################
@@ -380,7 +363,7 @@ RUN if [ ${INSTALL_LINUXBREW} = true ]; then \
       libexpat-dev libncurses-dev && \
 
     # Install the Linuxbrew
-    git clone https://github.com/Homebrew/linuxbrew.git ~/.linuxbrew && \
+    git clone --depth=1 https://github.com/Homebrew/linuxbrew.git ~/.linuxbrew && \
 
     echo "" >> ~/.bashrc && \
     echo 'export PKG_CONFIG_PATH"=/usr/local/lib/pkgconfig:/usr/local/lib64/pkgconfig:/usr/lib64/pkgconfig:/usr/lib/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/lib64/pkgconfig:/usr/share/pkgconfig:$PKG_CONFIG_PATH"' >> ~/.bashrc && \
