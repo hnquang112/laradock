@@ -73,6 +73,7 @@ services:
           - INSTALL_INTL=${PHP_FPM_INSTALL_INTL}
           - INSTALL_GHOSTSCRIPT=${PHP_FPM_INSTALL_GHOSTSCRIPT}
           - INSTALL_LDAP=${PHP_FPM_INSTALL_LDAP}
+          - INSTALL_SWOOLE=${PHP_FPM_INSTALL_SWOOLE}
         dockerfile: "Dockerfile-${PHP_VERSION}"
       volumes_from:
         - applications
@@ -214,7 +215,8 @@ services:
         - MYSQL_PASSWORD=${PERCONA_PASSWORD}
         - MYSQL_ROOT_PASSWORD=${PERCONA_ROOT_PASSWORD}
       volumes:
-        - percona:/var/lib/mysql
+        - ${DATA_SAVE_PATH}/percona:/var/lib/mysql
+        - ./percona/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
       ports:
         - "${PERCONA_PORT}:3306"
       networks:
@@ -242,6 +244,7 @@ services:
       build: ./mariadb
       volumes:
         - ${DATA_SAVE_PATH}/mariadb:/var/lib/mysql
+        - ./mariadb/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
       ports:
         - "${MARIADB_PORT}:3306"
       environment:
@@ -437,7 +440,10 @@ services:
 ### Adminer Container ####################################
 
     adminer:
-      build: ./adminer
+      build:
+        context: ./adminer
+        args:
+          - INSTALL_MSSQL=${ADM_INSTALL_MSSQL}
       ports:
         - "${ADM_PORT}:8080"
       depends_on:
