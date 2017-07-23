@@ -4,3 +4,4 @@
 .env
 .vagrant
 .project
+.docker-sync
