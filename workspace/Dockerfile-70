@@ -195,6 +195,19 @@ RUN if [ ${INSTALL_MONGO} = true ]; then \
 ;fi
 
 #####################################
+# PHP REDIS EXTENSION FOR PHP 7
+#####################################
+
+ARG INSTALL_PHPREDIS=false
+ENV INSTALL_PHPREDIS ${INSTALL_PHPREDIS}
+RUN if [ ${INSTALL_PHPREDIS} = true ]; then \
+    # Install Php Redis extension
+    printf "\n" | pecl -q install -o -f redis && \
+    echo "extension=redis.so" >> /etc/php/7.0/mods-available/redis.ini && \
+    phpenmod redis \
+;fi
+
+#####################################
 # Drush:
 #####################################
 USER root
@@ -208,6 +221,20 @@ RUN if [ ${INSTALL_DRUSH} = true ]; then \
     curl -fsSL -o /usr/local/bin/drush https://github.com/drush-ops/drush/releases/download/$DRUSH_VERSION/drush.phar | bash && \
     chmod +x /usr/local/bin/drush && \
     drush core-status \
+;fi
+
+#####################################
+# Drupal Console:
+#####################################
+USER root
+ARG INSTALL_DRUPAL_CONSOLE=false
+ENV INSTALL_DRUPAL_CONSOLE ${INSTALL_DRUPAL_CONSOLE}
+RUN if [ ${INSTALL_DRUPAL_CONSOLE} = true ]; then \
+    apt-get update -yqq && \
+    apt-get -y install mysql-client && \
+    curl https://drupalconsole.com/installer -L -o drupal.phar && \
+    mv drupal.phar /usr/local/bin/drupal && \
+    chmod +x /usr/local/bin/drupal \
 ;fi
 
 USER laradock
@@ -248,6 +275,9 @@ RUN if [ ${INSTALL_NODE} = true ]; then \
     echo 'export NVM_DIR="/home/laradock/.nvm"' >> ~/.bashrc && \
     echo '[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm' >> ~/.bashrc \
 ;fi
+
+# Add PATH for node
+ENV PATH $PATH:$NVM_DIR/versions/node/v${NODE_VERSION}/bin
 
 #####################################
 # YARN:
@@ -293,11 +323,11 @@ COPY ./aerospike.ini /etc/php/7.0/cli/conf.d/aerospike.ini
 
 RUN if [ ${INSTALL_AEROSPIKE} = true ]; then \
     # Install the php aerospike extension
-    curl -L -o /tmp/aerospike-client-php.tar.gz "https://github.com/aerospike/aerospike-client-php/archive/3.4.14.tar.gz" \
+    curl -L -o /tmp/aerospike-client-php.tar.gz "https://github.com/aerospike/aerospike-client-php/archive/master.tar.gz" \
     && mkdir -p aerospike-client-php \
     && tar -C aerospike-client-php -zxvf /tmp/aerospike-client-php.tar.gz --strip 1 \
     && ( \
-        cd aerospike-client-php/src/aerospike \
+        cd aerospike-client-php/src \
         && phpize \
         && ./build.sh \
         && make install \
@@ -548,6 +578,31 @@ RUN if [ ${INSTALL_PYTHON} = true ]; then \
   && apt-get -y install python python-pip python-dev build-essential  \
   && pip install --upgrade pip  \
   && pip install --upgrade virtualenv \
+;fi
+
+#####################################
+# ImageMagick:
+#####################################
+USER root
+ARG INSTALL_IMAGEMAGICK=false
+ENV INSTALL_IMAGEMAGICK ${INSTALL_IMAGEMAGICK}
+RUN if [ ${INSTALL_IMAGEMAGICK} = true ]; then \
+    apt-get install -y --force-yes imagemagick php-imagick \
+;fi
+
+#####################################
+# Terraform:
+#####################################
+USER root
+ARG INSTALL_TERRAFORM=false
+ENV INSTALL_TERRAFORM ${INSTALL_TERRAFORM}
+RUN if [ ${INSTALL_TERRAFORM} = true ]; then \
+    apt-get update -yqq \
+    && apt-get -y install sudo wget unzip \
+    && wget https://releases.hashicorp.com/terraform/0.10.6/terraform_0.10.6_linux_amd64.zip \
+    && unzip terraform_0.10.6_linux_amd64.zip \
+    && mv terraform /usr/local/bin \
+    && rm terraform_0.10.6_linux_amd64.zip \
 ;fi
 
 #
