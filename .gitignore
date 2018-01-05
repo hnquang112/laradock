@@ -3,5 +3,6 @@
 /data
 .env
 .vagrant
-.project
+/.project
 .docker-sync
+/jenkins/jenkins_home
