@@ -1,7 +1,7 @@
-ARG MYSQL_VERSION=8.0
+ARG MYSQL_VERSION=latest
 FROM mysql:${MYSQL_VERSION}
 
-MAINTAINER Mahmoud Zalt <mahmoud@zalt.me>
+LABEL maintainer="Mahmoud Zalt <mahmoud@zalt.me>"
 
 #####################################
 # Set Timezone
