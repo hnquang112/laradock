@@ -294,8 +294,7 @@ services:
     postgres:
       build: ./postgres
       volumes:
-        - /var/lib/postgresql/data
-        - ${DATA_SAVE_PATH}/postgres:/var/lib/postgresql
+        - ${DATA_SAVE_PATH}/postgres:/var/lib/postgresql/data
       ports:
         - "${POSTGRES_PORT}:5432"
       environment:
