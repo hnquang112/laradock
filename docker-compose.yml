@@ -173,6 +173,7 @@ services:
           - PHP_UPSTREAM_CONTAINER=${APACHE_PHP_UPSTREAM_CONTAINER}
           - PHP_UPSTREAM_PORT=${APACHE_PHP_UPSTREAM_PORT}
           - PHP_UPSTREAM_TIMEOUT=${APACHE_PHP_UPSTREAM_TIMEOUT}
+          - DOCUMENT_ROOT=${APACHE_DOCUMENT_ROOT}
       volumes_from:
         - applications
       volumes:
@@ -294,8 +295,7 @@ services:
     postgres:
       build: ./postgres
       volumes:
-        - /var/lib/postgresql/data
-        - ${DATA_SAVE_PATH}/postgres:/var/lib/postgresql
+        - ${DATA_SAVE_PATH}/postgres:/var/lib/postgresql/data
       ports:
         - "${POSTGRES_PORT}:5432"
       environment:
