@@ -1,18 +1,23 @@
 #!/bin/bash
 
+echo 'Updating repositories'
 sudo apt-get update -y
 sudo apt-get upgrade -y
 sudo apt-get autoremove -y
 sudo apt-get autoclean -y
 
-echo 'Install Docker Engine'
-wget -qO- https://get.docker.com/ | sh
-sudo usermod -aG docker $(whoami)
+echo 'Installing Docker Engine'
+# sudo apt-get update -y
+sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo apt-key fingerprint 0EBFCD88
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+sudo apt-get update -y
+sudo apt-get install -y docker-ce
 
-echo 'Install Docker Compose'
-sudo apt-get -y install python-pip
-sudo pip install docker-compose
+echo 'Installing Docker Compose'
+sudo curl -L https://github.com/docker/compose/releases/download/1.20.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+sudo curl -L https://raw.githubusercontent.com/docker/compose/1.20.1/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose
 
-# echo 'Pull Docker base images'
-# sudo docker pull postgres
-# sudo docker pull hnquang112/php7-laravel
+sudo docker run hello-world

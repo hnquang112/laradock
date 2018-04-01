@@ -12,8 +12,8 @@ Vagrant.configure(2) do |config|
 
 	# Every Vagrant development environment requires a box. You can search for
 	# boxes at https://atlas.hashicorp.com/search.
-	config.vm.box = "ubuntu/wily64"
-	config.vm.hostname = "docker-host"
+	config.vm.box = "ubuntu/xenial64"
+	config.vm.hostname = "vagrant-docker"
 	# config.vm.network :forwarded_port, guest: 8000, host: 4567
 	config.vm.network "private_network", ip: "192.168.33.10"
 	config.vm.synced_folder "../", "/vagrant"
@@ -22,14 +22,10 @@ Vagrant.configure(2) do |config|
 		vb.memory = "1024"
 	end
 
-	config.push.define "atlas" do |push|
-  		push.app = "hnquang112/vagrant-docker-compose"
-	end
+	# config.push.define "atlas" do |push|
+	#  		push.app = "hnquang112/vagrant-docker"
+	# end
 
-	# Docker provisioner: https://github.com/leighmcculloch/vagrant-docker-compose
-	# Need to run "vagrant plugin install vagrant-docker-compose"
-	# config.vm.provision :docker
-	# config.vm.provision :docker_compose#, rebuild: true, run: "always", yml: "/vagrant/docker-compose.yml"
 	config.vm.provision "shell", path: "bootstrap.sh"
 
 	# Disable automatic box update checking. If you disable this, then
