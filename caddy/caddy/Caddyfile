@@ -16,3 +16,8 @@ laravel.base:443 {
     log /var/log/caddy/access.log
     errors /var/log/caddy/error.log
 }
+
+laradock3.demo:80 {
+    import authlist.conf
+    root /var/www/public
+}
