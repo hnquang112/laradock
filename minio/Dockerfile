@@ -1,5 +1,10 @@
 FROM minio/minio
 
-LABEL maintainer="Thor Erik Lie <thor@thorerik.com>"
+LABEL maintainer="Quang Ho <hnquang112@yahoo.com.vn>"
 
-ENTRYPOINT ["minio", "server", "/export"]
+EXPOSE ${MINIO_PORT}
+
+ENV MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
+ENV MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
+
+ENTRYPOINT ["minio", "server", "${MINIO_BASE_PATH}"]
