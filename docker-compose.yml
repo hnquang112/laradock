@@ -291,8 +291,8 @@ services:
       ports:
         - "${MINIO_PORT}:9000"
       environment:
-        - MINIO_ACCESS_KEY=access
-        - MINIO_SECRET_KEY=secretkey
+        - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
+        - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
       networks:
         - frontend
         - backend
