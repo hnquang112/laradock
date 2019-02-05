@@ -7,3 +7,6 @@
 .docker-sync
 /jenkins/jenkins_home
 *.log
+/nginx/ssl/*.crt
+/nginx/ssl/*.key
+/nginx/ssl/*.csr
