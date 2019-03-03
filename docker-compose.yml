@@ -329,6 +329,7 @@ services:
         - "${MYSQL_PORT}:3306"
       networks:
         - backend
+      restart: on-failure
 
 ### Percona ################################################
     percona:
@@ -549,6 +550,7 @@ services:
       volumes:
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
         - ${CADDY_CONFIG_PATH}:/etc/caddy
+        - ${CADDY_CERT_PATH}:/etc/caddy/ssl
         - ${CADDY_HOST_LOG_PATH}:/var/log/caddy
         - ${DATA_PATH_HOST}:/root/.caddy
       ports:
