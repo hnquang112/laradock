@@ -14,7 +14,8 @@
 
 ARG LARADOCK_PHP_VERSION
 
-FROM laradock/workspace:2.2-${LARADOCK_PHP_VERSION}
+# FROM laradock/workspace:2.2-${LARADOCK_PHP_VERSION}
+FROM letsdockerize/laradock-workspace:2.4-${LARADOCK_PHP_VERSION}
 
 LABEL maintainer="Mahmoud Zalt <mahmoud@zalt.me>"
 
@@ -117,6 +118,9 @@ USER root
 # Add the composer.json
 COPY ./composer.json /home/laradock/.composer/composer.json
 
+# Add the auth.json for magento 2 credentials
+COPY ./auth.json /home/laradock/.composer/auth.json
+
 # Make sure that ~/.composer belongs to laradock
 RUN chown -R laradock:laradock /home/laradock/.composer
 
@@ -129,6 +133,15 @@ ENV COMPOSER_GLOBAL_INSTALL ${COMPOSER_GLOBAL_INSTALL}
 RUN if [ ${COMPOSER_GLOBAL_INSTALL} = true ]; then \
     # run the install
     composer global install \
+;fi
+
+# Check if auth file is disabled
+ARG COMPOSER_AUTH=false
+ENV COMPOSER_AUTH ${COMPOSER_AUTH}
+
+RUN if [ ${COMPOSER_AUTH} = false ]; then \
+    # remove the file
+    rm /home/laradock/.composer/auth.json \
 ;fi
 
 ARG COMPOSER_REPO_PACKAGIST
@@ -431,6 +444,31 @@ ARG INSTALL_LIBPNG=false
 RUN if [ ${INSTALL_LIBPNG} = true ]; then \
     apt-get update && \
     apt-get install libpng16-16 \
+;fi
+
+###########################################################################
+# Inotify EXTENSION:
+###########################################################################
+
+ARG INSTALL_INOTIFY=false
+
+RUN if [ ${INSTALL_INOTIFY} = true ]; then \
+    pecl -q install inotify && \
+    echo "extension=inotify.so" >> /etc/php/${LARADOCK_PHP_VERSION}/mods-available/inotify.ini && \
+    ln -s /etc/php/${LARADOCK_PHP_VERSION}/mods-available/inotify.ini /etc/php/${LARADOCK_PHP_VERSION}/cli/conf.d/20-inotify.ini \
+;fi
+
+###########################################################################
+# fswatch
+###########################################################################
+
+ARG INSTALL_FSWATCH=false
+
+RUN if [ ${INSTALL_FSWATCH} = true ]; then \
+    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 47FE03C1 \
+    && add-apt-repository -y ppa:hadret/fswatch \
+    || apt-get update -yqq \
+    && apt-get -y install fswatch \
 ;fi
 
 ###########################################################################
@@ -834,6 +872,23 @@ RUN if [ ${INSTALL_PYTHON} = true ]; then \
 ;fi
 
 ###########################################################################
+# POWERLINE:
+###########################################################################
+
+USER root
+ARG INSTALL_POWERLINE=false
+
+RUN if [ ${INSTALL_POWERLINE} = true ]; then \
+    if [ ${INSTALL_PYTHON} = true ]; then \
+    python -m pip install --upgrade powerline-status && \
+    echo "" >> /etc/bash.bashrc && \
+    echo ". /usr/local/lib/python2.7/dist-packages/powerline/bindings/bash/powerline.sh" >> /etc/bash.bashrc \
+  ;fi \
+;fi
+
+USER laradock
+
+###########################################################################
 # ImageMagick:
 ###########################################################################
 
@@ -933,6 +988,18 @@ ARG INSTALL_MYSQL_CLIENT=false
 RUN if [ ${INSTALL_MYSQL_CLIENT} = true ]; then \
     apt-get update -yqq && \
     apt-get -y install mysql-client \
+;fi
+
+###########################################################################
+# FFMpeg:
+###########################################################################
+
+USER root
+
+ARG INSTALL_FFMPEG=false
+
+RUN if [ ${INSTALL_FFMPEG} = true ]; then \
+  apt-get -y install ffmpeg \
 ;fi
 
 ###########################################################################

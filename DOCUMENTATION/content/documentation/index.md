@@ -631,12 +631,12 @@ docker-compose up -d metabase
 
 1) Boot the container `docker-compose up -d jenkins`. To enter the container type `docker-compose exec jenkins bash`.
 
-2) Go to `http://localhost:8090/` (if you didn't chanhed your default port mapping) 
+2) Go to `http://localhost:8090/` (if you didn't chanhed your default port mapping)
 
 3) Authenticate from the web app.
 
 - Default username is `admin`.
-- Default password is `docker-compose exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword`. 
+- Default password is `docker-compose exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword`.
 
 (To enter container as root type `docker-compose exec --user root jenkins bash`).
 
@@ -1290,6 +1290,21 @@ To install CodeIgniter 3 on Laradock all you have to do is the following simple 
 
 
 <br>
+<a name="Install-Powerline"></a>
+## Install Powerline
+
+1 - Open the `.env` file and set `WORKSPACE_INSTALL_POWERLINE` and `WORKSPACE_INSTALL_PYTHON` to `true`.
+
+2 - Run `docker-compose build workspace`, after the step above.
+
+Powerline is required python
+
+
+
+
+
+
+<br>
 <a name="Install-Symfony"></a>
 ## Install Symfony
 
@@ -1544,6 +1559,23 @@ Enabling Global Composer Install during the build for the container allows you t
 
 
 <br>
+<a name="Magento-2-authentication-credentials"></a>
+## Magento 2 authentication credential (composer install)
+
+1 - Open the `.env` file
+
+2 - Search for the `WORKSPACE_COMPOSER_AUTH` argument under the Workspace Container and set it to `true`
+
+3 - Now add your credentials to `workspace/auth.json`
+
+4 - Re-build the Workspace Container `docker-compose build workspace`
+
+
+
+
+
+
+<br>
 <a name="Install-Prestissimo"></a>
 ## Install Prestissimo
 
@@ -1677,6 +1709,22 @@ Linuxbrew is a package manager for Linux. It is the Linux version of MacOS Homeb
 1 - Open the `.env` file
 
 2 - Search for the `WORKSPACE_INSTALL_LINUXBREW` argument under the Workspace Container and set it to `true`
+
+3 - Re-build the container `docker-compose build workspace`
+
+
+
+
+
+<br>
+<a name="Install-FFMPEG"></a>
+## Install FFMPEG
+
+To install FFMPEG in the Workspace container
+
+1 - Open the `.env` file
+
+2 - Search for the `WORKSPACE_INSTALL_FFMPEG` argument under the Workspace Container and set it to `true`
 
 3 - Re-build the container `docker-compose build workspace`
 
@@ -2087,7 +2135,7 @@ This error sometimes happens because your Laravel application isn't running on t
 
 ## I get stuck when building nginx on `fetch http://mirrors.aliyun.com/alpine/v3.5/main/x86_64/APKINDEX.tar.gz`
 
-As stated on [#749](https://github.com/laradock/laradock/issues/749#issuecomment-419652646), Already fixed，just set `CHANGE_SOURCE` to false.		
+As stated on [#749](https://github.com/laradock/laradock/issues/749#issuecomment-419652646), Already fixed，just set `CHANGE_SOURCE` to false.
 
 ## Custom composer repo packagist url and npm registry url
 
