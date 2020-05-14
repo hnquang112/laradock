@@ -13,7 +13,8 @@
 #
 
 ARG LARADOCK_PHP_VERSION
-FROM laradock/workspace:2.6.1-${LARADOCK_PHP_VERSION}
+ARG BASE_IMAGE_TAG_PREFIX=latest
+FROM laradock/workspace:${BASE_IMAGE_TAG_PREFIX}-${LARADOCK_PHP_VERSION}
 
 LABEL maintainer="Mahmoud Zalt <mahmoud@zalt.me>"
 
@@ -870,7 +871,7 @@ ARG INSTALL_LARAVEL_ENVOY=false
 
 RUN if [ ${INSTALL_LARAVEL_ENVOY} = true ]; then \
     # Install the Laravel Envoy
-    composer global require "laravel/envoy=~1.0" \
+    composer global require "laravel/envoy=~2.0" \
 ;fi
 
 ###########################################################################
