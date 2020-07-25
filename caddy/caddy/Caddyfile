@@ -1,23 +1,55 @@
-# Docs: https://caddyserver.com/docs/caddyfile
-laravel.base:80 {
-    redir https://{host}{uri}
-}
-
-laravel.base:443 {
-    root /var/www/base/public
+(common) {
+    redir {
+        if {scheme} is http
+        / https://{host}{uri}
+    }
     fastcgi / php-fpm:9000 php {
         index index.php
     }
     rewrite {
-        to {path} {path}/ /index.php?{query}
+        to {path} {path} / /index.php? {query}
     }
     gzip
-    tls self_signed
+    browse
     log /var/log/caddy/access.log
     errors /var/log/caddy/error.log
+    tls self_signed
 }
 
-laradock3.demo:80 {
-    import authlist.conf
-    root /var/www/public
+http://motnha.net https://motnha.net http://www.motnha.net https://www.motnha.net {
+    root /var/www/wordpress
+    import common
+}
+
+http://akaunting.motnha.net https://akaunting.motnha.net {
+    root /var/www/akaunting/public
+    import common
+}
+
+http://invoice.motnha.net https://invoice.motnha.net {
+    root /var/www/invoice/public
+    import common
+}
+
+http://monica.motnha.net https://monica.motnha.net {
+    root /var/www/monica/public
+    import common
+}
+
+http://minio.motnha.net https://minio.motnha.net {
+    redir {
+        if {scheme} is http
+        / https://{host}{uri}
+    }
+    gzip
+    browse
+    log /var/log/caddy/access.log
+    errors /var/log/caddy/error.log
+    tls self_signed
+    proxy / localhost:9005 {
+        header_upstream Host {host}
+        header_upstream X-Real-IP {remote}
+        header_upstream X-Forwarded-For {remote}
+        header_upstream X-Forwarded-Proto {scheme}
+    }
 }
